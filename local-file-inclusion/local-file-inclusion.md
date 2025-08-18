@@ -1,0 +1,35 @@
+# Local File Inclusion (LFI) Cheatsheet
+
+## File Informasi Sistem & Konfigurasi yang Sering Diambil
+
+Berikut adalah daftar file penting pada sistem Linux/Unix yang sering menjadi target eksploitasi LFI, beserta penjelasan singkatnya:
+
+| Path/File/Folder      | Penjelasan & Cara Mengambil File di Dalam Folder                                                                                                                                                                                                                                             |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/etc/passwd`         | File: Berisi daftar user pada sistem. Tidak menyimpan password, tapi bisa digunakan untuk enumerasi user.                                                                                                                                                                                    |
+| `/etc/shadow`         | File: Berisi hash password user. Hanya bisa diakses root. Jika bisa diambil, sangat berbahaya.                                                                                                                                                                                               |
+| `/etc/hosts`          | File: Berisi mapping hostname ke IP address lokal. Bisa digunakan untuk enumerasi internal host.                                                                                                                                                                                             |
+| `/etc/hostname`       | File: Nama hostname dari mesin/server.                                                                                                                                                                                                                                                       |
+| `/etc/group`          | File: Berisi daftar grup pada sistem dan user yang tergabung di dalamnya.                                                                                                                                                                                                                    |
+| `/etc/issue`          | File: Menampilkan informasi banner sebelum login. Bisa mengungkap OS yang digunakan.                                                                                                                                                                                                         |
+| `/proc/self/environ`  | File: Berisi environment variable dari proses web server. Bisa mengandung credential atau path penting.                                                                                                                                                                                      |
+| `/proc/self/fd`       | Folder: Berisi daftar file descriptor yang sedang dibuka oleh proses. Untuk mengambil file di dalamnya, akses `/proc/self/fd/<nomor_fd>`, misal `/proc/self/fd/0` untuk stdin, `/proc/self/fd/1` untuk stdout, dst. Bisa digunakan untuk enumerasi file yang sedang diakses oleh web server. |
+| `/proc/self/mounts`   | File: Berisi daftar mount point filesystem yang sedang aktif. Berguna untuk mengetahui struktur storage dan mount pada sistem.                                                                                                                                                               |
+| `/proc/version`       | File: Informasi kernel Linux yang digunakan.                                                                                                                                                                                                                                                 |
+| `/proc/cmdline`       | File: Parameter boot kernel. Bisa mengandung info sensitif.                                                                                                                                                                                                                                  |
+| `/var/log/auth.log`   | File: Log autentikasi, bisa mengandung jejak login user.                                                                                                                                                                                                                                     |
+| `/var/log/apache2/`   | Folder: Berisi file log akses dan error Apache. Untuk mengambil file di dalamnya, akses `/var/log/apache2/access.log` atau `/var/log/apache2/error.log`.                                                                                                                                     |
+| `/root/.bash_history` | File: History perintah bash user root. Bisa mengandung credential atau perintah sensitif.                                                                                                                                                                                                    |
+| `/home/<user>/`       | Folder: Berisi file history perintah user, misal `/home/<user>/.bash_history`. Akses file di dalam folder sesuai nama user.                                                                                                                                                                  |
+| `/etc/httpd/conf/`    | Folder: Berisi file konfigurasi utama Apache. Untuk mengambil file di dalamnya, akses `/etc/httpd/conf/httpd.conf`.                                                                                                                                                                          |
+| `/etc/nginx/`         | Folder: Berisi file konfigurasi utama Nginx. Untuk mengambil file di dalamnya, akses `/etc/nginx/nginx.conf`.                                                                                                                                                                                |
+| `/etc/mysql/`         | Folder: Berisi file konfigurasi MySQL. Untuk mengambil file di dalamnya, akses `/etc/mysql/my.cnf`.                                                                                                                                                                                          |
+| `/etc/php.ini`        | File: Konfigurasi PHP. Bisa mengungkap settingan penting seperti disable_functions.                                                                                                                                                                                                          |
+
+## Catatan Penting
+
+- Tidak semua file di atas bisa diakses oleh user biasa, namun tetap menjadi target utama pada serangan LFI.
+- File log web server sering digunakan untuk teknik log poisoning (menyisipkan kode ke dalam log, lalu mengaksesnya via LFI).
+- File di `/proc` sangat berguna untuk enumerasi environment dan proses.
+
+---
