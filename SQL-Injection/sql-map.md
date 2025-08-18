@@ -78,9 +78,31 @@ sqlmap -u "http://target.com/vuln.php?id=1" --os-shell
 ## 3. Tips Tambahan
 
 - Gunakan `--batch` untuk auto-yes semua prompt.
-- Gunakan `--threads=10` untuk mempercepat proses.
 - Gunakan `--risk=3 --level=5` untuk pengujian lebih dalam.
 
----
-
 Referensi: [https://sqlmap.org/](https://sqlmap.org/)
+
+## 4. Penggunaan Aman untuk CTF
+
+**Catatan:** Pada CTF, dilarang melakukan brute force yang dapat mengganggu peserta lain. Gunakan opsi berikut untuk membatasi request:
+
+- `--delay=2` : Memberi jeda 2 detik antar request (ganti sesuai kebutuhan).
+- `--threads=1` : Gunakan thread minimal (default 1) agar tidak membebani server.
+
+Contoh:
+
+```bash
+sqlmap -u "http://target.com/vuln.php?id=1" --delay=2 --threads=1
+```
+
+## 5. Penggunaan Proxy
+
+- `--proxy="http://127.0.0.1:8080"` : Mengarahkan traffic sqlmap ke proxy (misal Burp Suite/ZAP).
+
+Contoh:
+
+```bash
+sqlmap -u "http://target.com/vuln.php?id=1" --proxy="http://127.0.0.1:8080"
+```
+
+---
