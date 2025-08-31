@@ -2,25 +2,19 @@
 
 Kumpulan lengkap cheatsheet cybersecurity untuk penetration testing, bug bounty hunting, dan riset keamanan.
 
+> **Catatan:** Cheatsheet ini dibuat untuk penggunaan pribadi. Beberapa konten di dalamnya dapat berasal atau diadaptasi dari berbagai sumber publik seperti repository GitHub, website, atau referensi lain. Hak cipta tetap milik pemilik aslinya.
+
 ## 📚 Konten
 
 Repository ini berisi cheatsheet praktis dan referensi cepat untuk berbagai topik cybersecurity:
 
-- **[SQL Injection](./SQL-Injection/)** - Panduan lengkap teknik dan payload SQL injection
-- _Cheatsheet lainnya akan segera hadir..._
-
-## 🎯 Tujuan
-
-Cheatsheet ini dirancang untuk:
-
-- Peneliti keamanan dan penetration tester
-- Bug bounty hunter
-- Mahasiswa yang belajar cybersecurity
-- Profesional keamanan yang membutuhkan referensi cepat
+- **[Web Exploitation](./web-exploitation/)** – Panduan teknik, payload, dan metodologi untuk eksploitasi aplikasi web.
+- **[Digital Forensics](./digital-foresics/)** – Referensi langkah-langkah analisis forensik digital dan investigasi insiden.
+- _Cheatsheet untuk topik lain akan segera ditambahkan..._
 
 ## 🚀 Cara Penggunaan
 
-Setiap folder berisi:
+Setiap folder dapat berisi:
 
 - Metodologi dan teknik yang detail
 - Payload dan command yang siap pakai
@@ -39,17 +33,3 @@ Kontribusi sangat diterima! Jika Anda ingin menambah cheatsheet baru atau memper
 ## ⚠️ Disclaimer
 
 Konten ini hanya untuk tujuan edukasi dan pengujian keamanan yang sah. Selalu pastikan Anda memiliki otorisasi yang tepat sebelum melakukan pengujian pada sistem apapun. Penulis tidak bertanggung jawab atas penyalahgunaan informasi ini.
-
-## 📝 Lisensi
-
-Proyek ini dilisensikan di bawah MIT License - lihat file [LICENSE](LICENSE) untuk detail.
-
-## 🔗 Sumber Daya Tambahan
-
-- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
-- [PortSwigger Web Security Academy](https://portswigger.net/web-security)
-- [HackerOne Hacktivity](https://hackerone.com/hacktivity)
-
----
-
-_Terakhir diperbarui: Agustus 2025_
