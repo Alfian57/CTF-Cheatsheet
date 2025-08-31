@@ -1,6 +1,6 @@
 # Daftar Tools Steganografi Populer untuk CTF
 
-Berikut adalah daftar tools steganografi yang sering digunakan dalam kompetisi CTF, beserta format file yang didukung dan keterangan singkatnya. Tools ini biasa digunakan untuk mencoba berbagai metode ekstraksi pesan tersembunyi dari file yang diberikan.
+Berikut adalah daftar tools steganografi yang sering digunakan dalam kompetisi CTF, beserta format file yang didukung dan keterangan singkatnya. Tools ini dapat membantu dalam proses ekstraksi maupun penyisipan pesan tersembunyi.
 
 | Nama Tool         | File yang Didukung      | Keterangan Singkat                                                                                       |
 | ----------------- | ----------------------- | -------------------------------------------------------------------------------------------------------- |
@@ -29,7 +29,9 @@ Berikut adalah daftar tools steganografi yang sering digunakan dalam kompetisi C
 | **stegbreak**     | JPG, JPEG               | Brute-force password pada file steghide/outguess/jphide.                                                 |
 | **jphide/jpseek** | JPG, JPEG               | Menyisipkan dan mengekstrak pesan di JPEG.                                                               |
 
-> **Tips:**
+> **Tips Penggunaan Tools:**
 >
 > - Cobalah tools di atas satu per satu jika tidak tahu metode embed yang digunakan.
 > - Perhatikan juga metadata, struktur file, dan lakukan analisis manual jika perlu.
+> - Beberapa tools membutuhkan dependensi khusus (misal: Java untuk stegsolve).
+> - Selalu gunakan wordlist yang relevan saat melakukan brute
